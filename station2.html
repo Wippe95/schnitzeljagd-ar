@@ -1,51 +1,68 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Station 2 – Wie oft pro Stunde fährt hier die Bahn?</title>
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://unpkg.com/aframe-ar@1.8.0/dist/aframe-ar.min.js"></script>
-    <script src="https://unpkg.com/aframe-gps-camera-component/dist/aframe-gps-camera-component.min.js"></script>
+    <meta charset="utf-8" />
+    <title>Station 2 – Wie oft fährt die Bahn?</title>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://unpkg.com/ar.js@3.4.2/aframe/build/aframe-ar.min.js"></script>
+    <style>
+      #coords {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 10;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 0.5em;
+        font-family: sans-serif;
+      }
+    </style>
   </head>
-  <body style="margin: 0; overflow: hidden;">
+  <body style="margin: 0; overflow: hidden">
+    <div id="coords">Warte auf GPS…</div>
+
     <a-scene
-      vr-mode-ui="enabled: false"
       embedded
-      arjs="sourceType: webcam; gpsMinAccuracy: 100; debugUIEnabled: false;"
+      vr-mode-ui="enabled: false"
+      arjs="sourceType: webcam; gpsMinAccuracy: 1000; debugUIEnabled: true;"
     >
-      <a-camera gps-camera rotation-reader></a-camera>
-
-      <!-- Frage als Text -->
+      <!-- Platzhalter-Objekt für die Bahnstation -->
       <a-entity
-        gps-entity-place="latitude: 50.973456; longitude: 11.036308"
-        text="value: Wie oft pro Stunde fährt hier die Bahn?; color: blue; align: center;"
-        position="0 2 0"
-      ></a-entity>
-
-      <!-- Wieder pinkes AR-Tier -->
-      <a-entity
-        gps-entity-place="latitude: 50.973456; longitude: 11.036308"
-        gltf-model="https://cdn.jsdelivr.net/gh/KatiRG/flamingo-glb@main/flamingo.glb"
+        gps-entity-place="latitude: 50.973456; longitude: 11.036308;"
+        geometry="primitive: box"
+        material="color: blue;"
         scale="2 2 2"
-        position="0 0 0"
       ></a-entity>
+
+      <a-camera gps-camera rotation-reader></a-camera>
     </a-scene>
 
-        <script>
-      // Live-Standortanzeige zum Debuggen
-      navigator.geolocation.watchPosition(
-        (position) => {
-          const lat = position.coords.latitude.toFixed(6);
-          const lon = position.coords.longitude.toFixed(6);
-          const acc = Math.round(position.coords.accuracy);
-          document.getElementById("coords").textContent =
-            `GPS: ${lat}, ${lon} (±${acc}m)`;
-        },
-        (err) => {
-          document.getElementById("coords").textContent =
-            "❌ Fehler beim Standortzugriff: " + err.message;
-        },
-        { enableHighAccuracy: true, maximumAge: 10000, timeout: 10000 }
-      );
+    <script>
+      window.addEventListener("load", () => {
+        const coordsDisplay = document.getElementById("coords");
+
+        if (!navigator.geolocation) {
+          coordsDisplay.textContent = "❌ Geolocation wird nicht unterstützt.";
+          return;
+        }
+
+        navigator.geolocation.watchPosition(
+          (position) => {
+            const lat = position.coords.latitude.toFixed(6);
+            const lon = position.coords.longitude.toFixed(6);
+            const acc = Math.round(position.coords.accuracy);
+            coordsDisplay.textContent =
+              `📍 GPS: ${lat}, ${lon} (±${acc} m)`;
+          },
+          (err) => {
+            coordsDisplay.textContent = "❌ Fehler beim GPS-Zugriff: " + err.message;
+          },
+          {
+            enableHighAccuracy: true,
+            maximumAge: 10000,
+            timeout: 10000,
+          }
+        );
+      });
     </script>
   </body>
 </html>
