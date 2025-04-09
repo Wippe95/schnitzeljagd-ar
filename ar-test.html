@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>AR Kamera-Test</title>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://unpkg.com/ar.js@3.4.2/aframe/build/aframe-ar.min.js"></script>
+  </head>
+  <body style="margin: 0; overflow: hidden">
+    <a-scene
+      embedded
+      vr-mode-ui="enabled: false"
+      arjs="sourceType: webcam; gpsMinAccuracy: 1000; debugUIEnabled: false;"
+    >
+      <a-entity
+        gps-entity-place="latitude: 50.973456; longitude: 11.036308;"
+        geometry="primitive: sphere"
+        material="color: deeppink;"
+        scale="2 2 2"
+      ></a-entity>
+
+      <a-camera gps-camera rotation-reader></a-camera>
+    </a-scene>
+  </body>
+</html>
