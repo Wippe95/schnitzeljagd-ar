@@ -29,5 +29,23 @@
         position="0 0 0"
       ></a-entity>
     </a-scene>
+
+        <script>
+      // Live-Standortanzeige zum Debuggen
+      navigator.geolocation.watchPosition(
+        (position) => {
+          const lat = position.coords.latitude.toFixed(6);
+          const lon = position.coords.longitude.toFixed(6);
+          const acc = Math.round(position.coords.accuracy);
+          document.getElementById("coords").textContent =
+            `GPS: ${lat}, ${lon} (±${acc}m)`;
+        },
+        (err) => {
+          document.getElementById("coords").textContent =
+            "❌ Fehler beim Standortzugriff: " + err.message;
+        },
+        { enableHighAccuracy: true, maximumAge: 10000, timeout: 10000 }
+      );
+    </script>
   </body>
 </html>
