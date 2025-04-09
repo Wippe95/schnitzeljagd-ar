@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Station 2 – Wie oft pro Stunde fährt hier die Bahn?</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-ar@1.8.0/dist/aframe-ar.min.js"></script>
+    <script src="https://unpkg.com/aframe-gps-camera-component/dist/aframe-gps-camera-component.min.js"></script>
+  </head>
+  <body style="margin: 0; overflow: hidden;">
+    <a-scene
+      vr-mode-ui="enabled: false"
+      embedded
+      arjs="sourceType: webcam; gpsMinAccuracy: 100; debugUIEnabled: false;"
+    >
+      <a-camera gps-camera rotation-reader></a-camera>
+
+      <!-- Frage als Text -->
+      <a-entity
+        gps-entity-place="latitude: 50.973456; longitude: 11.036308"
+        text="value: Wie oft pro Stunde fährt hier die Bahn?; color: blue; align: center;"
+        position="0 2 0"
+      ></a-entity>
+
+      <!-- Wieder pinkes AR-Tier -->
+      <a-entity
+        gps-entity-place="latitude: 50.973456; longitude: 11.036308"
+        gltf-model="https://cdn.jsdelivr.net/gh/KatiRG/flamingo-glb@main/flamingo.glb"
+        scale="2 2 2"
+        position="0 0 0"
+      ></a-entity>
+    </a-scene>
+  </body>
+</html>
